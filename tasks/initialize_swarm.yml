@@ -1,0 +1,25 @@
+- name: Install python pip
+  yum:
+    name:
+      - epel-release
+      - python-pip
+    state: present 
+
+
+- name: Install docker sdk
+  pip:
+    name: 'docker>1.25'
+
+- name: Initialize swarm
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ docker_swarm_addr }}"
+    
+- name: Get info on Docker Swarm
+  docker_swarm_info:
+  register: result
+    
+- name: Inform about swarm 
+  debug:
+    msg: '{{ result.docker_swarm_active }}'
+

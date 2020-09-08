@@ -1,0 +1,53 @@
+---
+- name: Ensure docker old version is uninstalled
+  yum:
+    pkg:
+      - docker
+      -  docker-client 
+      -  docker-client-latest 
+      -  docker-common 
+      -  docker-latest 
+      -  docker-latest-logrotate 
+      -  docker-logrotate 
+      -  docker-engine
+    state: absent
+
+
+- name: Add Docker GPG key.
+  rpm_key:  
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+
+
+- name: Add docker repository
+  get_url:
+    url:  https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
+    owner: root
+    group: root
+
+- name: install docker
+  yum:
+    pkg:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+    state: present
+  notify: restart docker
+
+
+  
+- name: Ensure docker is running
+  service:
+    name: docker
+    state: restarted
+    enabled: true
+
+
+- name: Add user {{ user }} to docker group
+  user:
+    name: "{{ user }}"
+    group: docker
+    append: true
+

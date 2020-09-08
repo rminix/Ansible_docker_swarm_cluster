@@ -1,0 +1,5 @@
+- name: Remove a node from the cluster
+  shell: docker swarm leave
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['removed_nodes'] }}"
+  when: inventory_hostname  in  groups['removed_nodes'] 

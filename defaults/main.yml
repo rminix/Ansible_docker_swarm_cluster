@@ -1,0 +1,13 @@
+---
+user: ''
+
+
+#Swarm 
+skip_docker_installation: false
+skip_swarm_initialize: false
+skip_join_cluster: false
+skip_swarm_remove_node: false
+
+
+docker_swarm_iface: "{{ ansible_default_ipv4['interface'] }}"
+docker_swarm_addr:  "{{ hostvars[inventory_hostname]['ansible_' + docker_swarm_iface]['ipv4']['address'] }}"

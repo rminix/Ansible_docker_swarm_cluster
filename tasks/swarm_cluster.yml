@@ -1,0 +1,12 @@
+- name: get docker swarm join token for worker
+  shell: docker swarm join-token worker
+  register: worker_token
+  delegate_to: "{{ groups['managers'][0] }}"
+
+- name: Add worker to cluster
+  shell: "{{ worker_token.stdout_lines[2] }}"
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['workers'] }}"
+  run_once: True
+
+

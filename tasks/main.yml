@@ -1,0 +1,24 @@
+---
+- include_tasks: install_docker.yml
+  when: 
+  - ansible_os_family == 'RedHat'
+  - not skip_docker_installation
+
+
+- include_tasks: initialize_swarm.yml
+  when:
+    - not skip_swarm_initialize
+    - ansible_os_family == 'RedHat'
+    - inventory_hostname == groups['managers'][0]
+
+
+- include_tasks: swarm_cluster.yml
+  when:
+    - not skip_join_cluster
+    - ansible_os_family == 'RedHat'
+
+- include_tasks: swarm_remove_node.yml
+  when:
+    - not skip_swarm_remove_node
+    - ansible_os_family == 'RedHat'
+
