@@ -50,4 +50,5 @@
     name: "{{ user }}"
     group: docker
     append: true
+  when: user is defined
 
